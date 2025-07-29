@@ -1,8 +1,12 @@
 import 'dotenv/config';
 import { processAppointments } from './jobs/appointmentJob';
-import cron from 'node-cron';
 
-cron.schedule('*/10 * * * *', async () => {
-  console.log('Executando job...');
+export async function start() {
+  console.log('Executando job Clinicorp...');
   await processAppointments();
-});
+}
+
+// Permite executar localmente via `ts-node src/index.ts`
+if (require.main === module) {
+  start();
+}
