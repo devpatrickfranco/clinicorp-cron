@@ -1,0 +1,32 @@
+name: Rodar cron de agendamento
+
+on:
+  schedule:
+    - cron: "*/10 * * * *" # Executa a cada 10 minutos
+  workflow_dispatch:       # Permite rodar manualmente também
+
+jobs:
+  run-cron:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositório
+        uses: actions/checkout@v3
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Criar arquivo .env com secrets
+        run: |
+          echo "CLINICORP_TOKEN=${{ secrets.CLINICORP_TOKEN }}" >> .env
+          echo "CLINICORP_SUBSCRIBER_ID=${{ secrets.CLINICORP_SUBSCRIBER_ID }}" >> .env
+          echo "CLINICORP_BUSINESS_ID=${{ secrets.CLINICORP_BUSINESS_ID }}" >> .env
+          echo "EVO_TOKEN=${{ secrets.EVO_TOKEN }}" >> .env
+
+      - name: Rodar cron
+        run: npx tsx src/jobs/appointmentJob.ts

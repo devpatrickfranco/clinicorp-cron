@@ -2,6 +2,7 @@ import { getAppointments } from '../services/clinicorpService';
 import { minutesUntilAppointment, isWithinInterval } from '../utils/timeUtils';
 import { sendEvolutionMessage } from '../services/evolutionService';
 import dayjs from 'dayjs';
+import 'dotenv/config'
 
 const sentMessages = new Set<string>();
 
